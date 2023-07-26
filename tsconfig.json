@@ -1,0 +1,42 @@
+{
+  "compilerOptions": {
+    // "strict": true /* 모든 엄격한 타입-체킹 옵션 활성화 여부 */,
+    "noImplicitAny": false /* 'any' 타입으로 구현된 표현식 혹은 정의 에러처리 여부 */,
+    "strictNullChecks": true /* 엄격한 null 확인 여부 */,
+    "strictFunctionTypes": true /* 함수 타입에 대한 엄격한 확인 여부 */,
+    "strictBindCallApply": true /* 함수에 엄격한 'bind', 'call' 그리고 'apply' 메소드 사용 여부 */,
+    // "strictPropertyInitialization": true /* 클래스의 값 초기화에 엄격한 확인 여부 */,
+    "noImplicitThis": true /* 'any' 타입으로 구현된 'this' 표현식 에러처리 여부 */,
+    "alwaysStrict": true /* strict mode로 분석하고 모든 소스 파일에 "use strict"를 추가할 지 여부 */,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "target": "es2017",
+    "baseUrl": ".",
+    "outDir": "./dist",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "types": [
+      "reflect-metadata",
+      "node",
+      // "jest"
+    ],
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    },
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "test/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
