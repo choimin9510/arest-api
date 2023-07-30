@@ -107,3 +107,6 @@ public
 /dist
 /tmp
 /out-tsc
+
+# mysql volume
+/mysql

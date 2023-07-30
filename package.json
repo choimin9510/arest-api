@@ -5,15 +5,23 @@
   "main": "index.js",
   "scripts": {
     "build": "npx tsc",
-    "start": "node index.js",
-    "dev": "nodemon --watch \"*.ts\" --exec \"ts-node -r tsconfig-paths/register\" ./src/index.ts"
+    "start": "node -r dotenv/config index.js",
+    "dev": "nodemon --watch \"*.ts\" --exec \"ts-node -r tsconfig-paths/register\" -r dotenv/config ./src/index.ts"
   },
   "author": "choihaamin",
   "license": "ISC",
   "dependencies": {
+    "@faker-js/faker": "^8.0.2",
+    "@types/axios": "^0.14.0",
     "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "envalid": "^7.3.1",
     "express": "^4.18.2",
-    "helmet": "^7.0.0"
+    "helmet": "^7.0.0",
+    "mysql2": "^3.5.2",
+    "puppeteer": "^20.9.0",
+    "typeorm": "^0.3.17",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",

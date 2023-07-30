@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Router } from 'express';
+
+import { RequestHandler } from 'express';
 
 /**
  * 메타 타입
@@ -13,32 +13,63 @@ enum MetaType {
 /**
  * 메소드 타입
  */
-enum MethodType {
-  'GET',
-  'POST',
-  'PUT',
-  'PATCH',
-  'DELETE'
+export enum MethodType {
+  GET = 'get',
+  POST = 'post',
+  PUT = 'put',
+  PATCH = 'patch',
+  DELETE = 'delete'
 }
 
-export function Controller() {
-  return function (target: Function) {
+/**
+ * 라우트 정보
+ */
+export interface RouteInformation {
+  /** 경로 */
+  path: string;
+
+  /** 메소드 타입 */
+  methodType: MethodType;
+
+  /** 실행함수 */
+  action: RequestHandler;
+}
+
+export function Controller(prefix: string) {
+  return <T extends { new (...args: any[]): any }>(target: T): any => {
+    const routeInformationList: RouteInformation[] = [];
+
     Object.getOwnPropertyNames(target.prototype).forEach((key) => {
-      const routeHandler = target.prototype[key];
+      const action = target.prototype[key];
       const path = Reflect.getMetadata(MetaType.PATH, target.prototype, key);
+      const methodType = Reflect.getMetadata(MetaType.METHOD, target.prototype, key);
 
       if (path) {
-        target.prototype.setPath(path);
-        target.prototype.setRouter(Router());
-        target.prototype.router.get(path, routeHandler.bind(target.prototype));
+        routeInformationList.push({
+          path: '/' + prefix + path,
+          methodType,
+          action
+        });
       }
     });
+
+    const targetClass = class extends target {
+      constructor(...args: any[]) {
+        super(...args);
+
+        for (const routeInformation of routeInformationList) {
+          this.setRouter(routeInformation.path, routeInformation.methodType, routeInformation.action.bind(this));
+        }
+      }
+    };
+
+    return targetClass;
   };
 }
 
 function Methods(methodType: MethodType) {
   return function (path: string) {
-    return function (target: Object, key: string) {
+    return function (target: any, key: string) {
       Reflect.defineMetadata(MetaType.PATH, path, target, key);
       Reflect.defineMetadata(MetaType.METHOD, methodType, target, key);
     };

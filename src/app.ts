@@ -1,17 +1,25 @@
 import express from 'express';
-import { injectable, multiInject } from 'inversify';
+import { injectable, multiInject, inject } from 'inversify';
 import helmet from 'helmet';
 import cors from 'cors';
 import { DevError } from './errors/dev.error';
 import { BaseController } from './controllers/base.controller';
+import { Database } from './configs/database.config';
+import { AppConfig } from './configs/app.config';
 
 @injectable()
 export class App {
   private app: express.Application = express();
   private isInitialized: boolean = false;
-  @multiInject(BaseController) private controllers: BaseController[];
 
-  public initialize(process: NodeJS.Process): void {
+  @inject(AppConfig) private readonly appConfig: AppConfig;
+  @inject(Database) private readonly database: Database;
+  @multiInject(BaseController) private readonly controllers: BaseController[];
+
+  public initialize(): void {
+    this.appConfig.initialize();
+    this.database.connect();
+
     this.initializePreMiddlewares();
     this.initializeControllers();
 
