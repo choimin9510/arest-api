@@ -5,9 +5,10 @@ import { RequestHandler } from 'express';
 /**
  * 메타 타입
  */
-enum MetaType {
+export enum MetaType {
   'PATH',
-  'METHOD'
+  'METHOD',
+  'PUBLIC'
 }
 
 /**
@@ -33,6 +34,9 @@ export interface RouteInformation {
 
   /** 실행함수 */
   action: RequestHandler;
+
+  /** 퍼블릭 함수 여부 */
+  isPublic: boolean;
 }
 
 export function Controller(prefix: string) {
@@ -43,12 +47,14 @@ export function Controller(prefix: string) {
       const action = target.prototype[key];
       const path = Reflect.getMetadata(MetaType.PATH, target.prototype, key);
       const methodType = Reflect.getMetadata(MetaType.METHOD, target.prototype, key);
+      const isPublic = !!Reflect.getMetadata(MetaType.PUBLIC, target.prototype, key);
 
       if (path) {
         routeInformationList.push({
           path: '/' + prefix + path,
           methodType,
-          action
+          action,
+          isPublic
         });
       }
     });
@@ -58,7 +64,7 @@ export function Controller(prefix: string) {
         super(...args);
 
         for (const routeInformation of routeInformationList) {
-          this.setRouter(routeInformation.path, routeInformation.methodType, routeInformation.action.bind(this));
+          this.setRouter(routeInformation.path, routeInformation.methodType, routeInformation.action.bind(this), routeInformation.isPublic);
         }
       }
     };

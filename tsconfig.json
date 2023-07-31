@@ -1,4 +1,7 @@
 {
+  "ts-node": {
+    "files": true
+  },
   "compilerOptions": {
     // "strict": true /* 모든 엄격한 타입-체킹 옵션 활성화 여부 */,
     "noImplicitAny": false /* 'any' 타입으로 구현된 표현식 혹은 정의 에러처리 여부 */,

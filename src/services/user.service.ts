@@ -20,10 +20,11 @@ export class UserService {
    * 세션 정보 저장
    * @param cookies 쿠키정보
    */
-  saveSession(cookies: string) {
+  saveSession(shopCode: string, cookies: string) {
     const session = new Session();
 
     session.uuid = uuid();
+    session.shopCode = shopCode;
     session.data = cookies;
 
     return this.SessionRepository.insert(session).then(() => session.uuid);

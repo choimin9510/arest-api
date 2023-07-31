@@ -1,5 +1,13 @@
+import { DeliveryCompanyCode } from '@/interfaces/delivery.company.code';
+import { OrderListDto } from '@/interfaces/order.list.dto';
+import { OrderListResult } from '@/interfaces/order.result';
 import { injectable } from 'inversify';
 import { Dialog, Page, Protocol } from 'puppeteer';
+
+/**
+ * 배송사 정보 인터페이스
+ */
+export type DeliveryInfo = { deliveryCompanyCode: DeliveryCompanyCode; deliveryCompanyName: keyof typeof DeliveryCompanyCode };
 
 export const ServiceSymbols = {
   user: Symbol.for('user'),
@@ -26,12 +34,30 @@ export abstract class BaseService {
   public abstract loginCheck(cookies: string): Promise<boolean>;
 
   /**
+   * 주문조회
+   * @param orderListDto 주문조회 정보
+   */
+  abstract orderList(cookies: string, orderListDto: OrderListDto): Promise<OrderListResult>;
+
+  /**
    * 쿠키정보 Array -> String
    * @param cookies 쿠키정보 (Array)
    * @returns 쿠키정보(String>
    */
   protected cookieArray2String(cookies: Protocol.Network.Cookie[]): string {
     return cookies.map((o) => `${o.name}=${o.value}`).join('; ');
+  }
+
+  /**
+   * 배송사 정보 구하기
+   * @param deliveryInfo 배송코드 or 배송사명
+   */
+  getDeliveryInfo(deliveryInfo: string): DeliveryInfo {
+    const keys = Object.keys(DeliveryCompanyCode);
+    const values = Object.values(DeliveryCompanyCode);
+    const idx = keys.findIndex((o) => o === deliveryInfo);
+
+    return { deliveryCompanyCode: values[idx], deliveryCompanyName: keys[idx] as keyof typeof DeliveryCompanyCode };
   }
 
   /**

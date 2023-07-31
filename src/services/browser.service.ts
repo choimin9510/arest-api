@@ -1,9 +1,9 @@
-import puppeteer, { Browser, Page, PuppeteerLaunchOptions } from 'puppeteer';
+import puppeteer, { BrowserContext, Page, PuppeteerLaunchOptions } from 'puppeteer';
 
 export class UsePuppeteer {
-  async createInstance(options: PuppeteerLaunchOptions) {
+  static async createInstance(options: PuppeteerLaunchOptions) {
     const browser = await puppeteer.launch(options);
-    const useBrowser: UseBrowser = Object.assign(browser, {
+    const useBrowser: UseBrowser = Object.assign(await browser.createIncognitoBrowserContext(), {
       newSessionPage: new UseBrowser().newSessionPage
     });
 
@@ -11,7 +11,7 @@ export class UsePuppeteer {
   }
 }
 
-export class UseBrowser extends Browser {
+export class UseBrowser extends BrowserContext {
   public async newSessionPage(): Promise<Page> {
     const page = await this.newPage();
 

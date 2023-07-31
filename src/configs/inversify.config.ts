@@ -12,6 +12,7 @@ import { OwnerclanService } from '@/services/ownerclan.service';
 import Axios from 'axios';
 import { UsePuppeteer } from '@/services/browser.service';
 import { UserService } from '@/services/user.service';
+import { AuthMiddleware } from '@/middlewares/auth.middleware';
 
 class Container {
   private readonly container: InversifyContainer = new InversifyContainer({ defaultScope: 'Singleton' });
@@ -33,6 +34,7 @@ class Container {
     this.container.load(this.getRepositoriesModule());
     this.container.load(this.getControllersModule());
     this.container.load(this.getServicesModule());
+    this.container.load(this.getMiddlewaresModule());
 
     this.container.bind<App>(App).toSelf();
   }
@@ -60,8 +62,7 @@ class Container {
       bind<UserService>(ServiceSymbols.user).to(UserService);
       bind<OwnerclanService>(ServiceSymbols.ownerclan).to(OwnerclanService);
 
-      const puppeteer = new UsePuppeteer();
-      const browser = await puppeteer.createInstance({
+      const browser = await UsePuppeteer.createInstance({
         headless: 'new',
         defaultViewport: null,
         devtools: false,
@@ -73,7 +74,13 @@ class Container {
         ]
       });
       bind(ServiceSymbols.browser).toConstantValue(browser);
-      bind(ServiceSymbols.http).toConstantValue(Axios.create());
+      bind(ServiceSymbols.http).toConstantValue(Axios);
+    });
+  }
+
+  private getMiddlewaresModule(): ContainerModule {
+    return new ContainerModule((bind: interfaces.Bind) => {
+      bind<AuthMiddleware>(AuthMiddleware).toSelf();
     });
   }
 }

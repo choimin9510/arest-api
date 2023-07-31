@@ -1,11 +1,27 @@
 import { BaseController } from './base.controller';
-import { Request, Response } from 'express';
-import { Controller, Get } from '@/decorators/controller.decorator';
+import { Response } from 'express';
+import { Controller, Get, Post } from '@/decorators/controller.decorator';
+import { container } from '@/configs/inversify.config';
+import { UseRequest } from '@/interfaces/use.request';
+import { OrderListDto } from '@/interfaces/order.list.dto';
+import { ResultResponse } from '@/interfaces/result.response';
+import { OrderListResult } from '@/interfaces/order.result';
 
-@Controller('test')
+@Controller('order')
 export class OrderController extends BaseController {
-  @Get('/2')
-  private async test2(request: Request, response: Response) {
-    response.send('test');
+  @Post('/:sessionId')
+  private async orderList(request: UseRequest<OrderListDto>, response: Response) {
+    const { shopCode, data: cookies } = request.session;
+
+    const shopService = container.getShopService(shopCode);
+
+    const orderListResult = await shopService.orderList(cookies, request.body);
+
+    const result: ResultResponse<OrderListResult> = {
+      result: 'success',
+      data: orderListResult
+    };
+
+    response.send(result);
   }
 }
