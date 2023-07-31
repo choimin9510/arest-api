@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
-import { BaseService, ServiceSymbols } from './base.service';
-import { UseBrowser } from './browser.service';
+import { BaseService, ServiceSymbols } from '../base.service';
+import { UseBrowser } from '../browser.service';
 import { Axios } from 'axios';
 import { OrderListDto } from '@/interfaces/order.list.dto';
 import { IOrder } from '@/interfaces/order';

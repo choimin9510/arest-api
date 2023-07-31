@@ -8,7 +8,7 @@ import { Database } from './database.config';
 import { FakeRepository } from '@/repositories/fake.repository';
 import { AppConfig } from './app.config';
 import { BaseService, ServiceSymbols } from '@/services/base.service';
-import { OwnerclanService } from '@/services/ownerclan.service';
+import { OwnerclanService } from '@/services/shop/ownerclan.service';
 import Axios from 'axios';
 import { UsePuppeteer } from '@/services/browser.service';
 import { UserService } from '@/services/user.service';
