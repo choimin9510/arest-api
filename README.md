@@ -7,7 +7,7 @@ ARestAPI 는 도매처(B2B) 통합 API 서비스 입니다.
 - [x] 주문조회 `/api/order`
 - [ ] 주문 상세조회 `/api/order/:orderId`
 - [ ] 상품조회 `/api/product`
-- [ ] 상품 상세조회 `/api/product/:productId`
+- [ ] 상품 상세조회 `/api/product/:productId`
 - [ ] 예치금 사용내역 조회
 - [ ] 1:1 문의조회
 
