@@ -1,4 +1,12 @@
-import puppeteer, { BrowserContext, Page, PuppeteerLaunchOptions } from 'puppeteer';
+import puppeteer, { Browser, BrowserContext, Page, PuppeteerLaunchOptions } from 'puppeteer';
+
+const browsers: Browser[] = [];
+
+process.on('exit', function () {
+  for (const browser of browsers) {
+    browser.close();
+  }
+});
 
 export class UsePuppeteer {
   static async createInstance(options: PuppeteerLaunchOptions) {
@@ -7,6 +15,7 @@ export class UsePuppeteer {
       newSessionPage: new UseBrowser().newSessionPage
     });
 
+    browsers.push(browser);
     return useBrowser;
   }
 }
