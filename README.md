@@ -25,6 +25,8 @@ ARestAPI 는 도매처(B2B) 통합 API 서비스 입니다.
 * dotenv and envalid
 * cors and helmet
 * jest (unit tests)
+* Puppeteer
+* Axios
 
 ## 의존성 설치
 `npm i`
