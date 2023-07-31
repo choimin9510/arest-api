@@ -10,7 +10,7 @@ import { OrderListResult } from '@/interfaces/order.result';
 @Controller('order')
 export class OrderController extends BaseController {
   @Post('/:sessionId')
-  private async orderList(request: UseRequest<OrderListDto>, response: Response) {
+  async orderList(request: UseRequest<OrderListDto>, response: Response) {
     const { shopCode, data: cookies } = request.session;
 
     const shopService = container.getShopService(shopCode);

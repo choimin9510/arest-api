@@ -17,7 +17,7 @@ export class AuthController extends BaseController {
 
   @Public()
   @Post('/login')
-  private async login(request: UseRequest<LoginDto>, response: Response) {
+  async login(request: UseRequest<LoginDto>, response: Response) {
     const { shopCode, id, password } = request.body;
     const shopService = container.getShopService(shopCode);
 
@@ -35,7 +35,7 @@ export class AuthController extends BaseController {
   }
 
   @Get('/login-check/:sessionId')
-  private async loginCheck(request: Request, response: Response) {
+  async loginCheck(request: Request, response: Response) {
     const { shopCode, data: cookies, uuid: sessionId } = request.session;
     const shopService = container.getShopService(shopCode);
 
