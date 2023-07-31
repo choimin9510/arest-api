@@ -28,6 +28,11 @@ export class AppConfig {
     return this._mysqlDatabase;
   }
 
+  private _serverPort: number;
+  get serverPort() {
+    return this._serverPort;
+  }
+
   constructor() {
     this.initialize();
   }
@@ -38,7 +43,8 @@ export class AppConfig {
       MYSQL_PORT: port({ default: 3306 }),
       MYSQL_USERNAME: str({ default: 'root' }),
       MYSQL_PASSWORD: str({ default: 'admin' }),
-      MYSQL_DATABASE: str({ default: 'arestapi' })
+      MYSQL_DATABASE: str({ default: 'arestapi' }),
+      SERVER_PORT: port({ default: 1041 })
     });
 
     this._mysqlHost = env.MYSQL_HOST;
@@ -46,5 +52,6 @@ export class AppConfig {
     this._mysqlUsername = env.MYSQL_USERNAME;
     this._mysqlPassword = env.MYSQL_PASSWORD;
     this._mysqlDatabase = env.MYSQL_DATABASE;
+    this._serverPort = env.SERVER_PORT;
   }
 }

@@ -31,7 +31,7 @@ export class App {
       throw new DevError('Call initialize() before.');
     }
 
-    const server = this.app.listen(1041, () => {
+    const server = this.app.listen(this.appConfig.serverPort, () => {
       // console.log(server.address());
     });
   }
