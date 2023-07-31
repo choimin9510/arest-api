@@ -62,57 +62,52 @@ export class OwnerclanService extends BaseService {
    * @param orderListDto 주문조회 정보
    */
   async orderList(cookies: string, orderListDto: OrderListDto): Promise<OrderListResult> {
-    try {
-      const orders: IOrder[] = [];
-      const { data } = await this.http.post(
-        this.baseUrl + '/V2/_ajax/getOrderList.php',
-        {
-          outputType: 'json',
-          pageNum: 1,
-          listNum: 1000,
-          ordGbn: 'A',
-          startDate: orderListDto.startDate,
-          finishDate: orderListDto.endDate,
-          deliType: 'N,S,Y,E,D,C,B,R,Z', // 전체
-          // deliType: 'Y', // 배송중
-          searchType: 'al',
-          searchKeyword: '',
-          sortType: 'orderDate',
-          dateType: 1,
-          deliLate: 'N'
-        },
-        {
-          headers: {
-            'Content-type': 'application/x-www-form-urlencoded',
-            cookie: cookies
-          }
-        }
-      );
-
-      for (const order of data.orderList) {
-        for (const product of order.productList) {
-          const deliveryInfo = this.getDeliveryInfo(product.deliCom);
-
-          orders.push({
-            orderNo: order.orderCode,
-            prodName: product.productName,
-            optName: `${product.opt1_name}${product.opt2_name ? ` / ${product.opt2_name}` : ''}`,
-            quantity: product.quantity,
-            recipientName: order.receiverName,
-            trackingNumber: product.deliNum,
-            deliveryCompanyCode: deliveryInfo.deliveryCompanyCode,
-            deliveryCompanyName: deliveryInfo.deliveryCompanyName,
-            zipCode: order.receiverAddr.match(/우편번호\s*:\s*([0-9]+)/)[1],
-            productCode: product.selfcode,
-            manageCode: product.selfcode
-          });
+    const orders: IOrder[] = [];
+    const { data } = await this.http.post(
+      this.baseUrl + '/V2/_ajax/getOrderList.php',
+      {
+        outputType: 'json',
+        pageNum: 1,
+        listNum: 1000,
+        ordGbn: 'A',
+        startDate: orderListDto.startDate,
+        finishDate: orderListDto.endDate,
+        deliType: 'N,S,Y,E,D,C,B,R,Z', // 전체
+        // deliType: 'Y', // 배송중
+        searchType: 'al',
+        searchKeyword: '',
+        sortType: 'orderDate',
+        dateType: 1,
+        deliLate: 'N'
+      },
+      {
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded',
+          cookie: cookies
         }
       }
+    );
 
-      return { totalCnt: orders.length, orders };
-    } catch (err) {
-      console.log(err.message);
-      throw 'test';
+    for (const order of data.orderList) {
+      for (const product of order.productList) {
+        const deliveryInfo = this.getDeliveryInfo(product.deliCom);
+
+        orders.push({
+          orderNo: order.orderCode,
+          prodName: product.productName,
+          optName: `${product.opt1_name}${product.opt2_name ? ` / ${product.opt2_name}` : ''}`,
+          quantity: product.quantity,
+          recipientName: order.receiverName,
+          trackingNumber: product.deliNum,
+          deliveryCompanyCode: deliveryInfo.deliveryCompanyCode,
+          deliveryCompanyName: deliveryInfo.deliveryCompanyName,
+          zipCode: order.receiverAddr.match(/우편번호\s*:\s*([0-9]+)/)[1],
+          productCode: product.selfcode,
+          manageCode: product.selfcode
+        });
+      }
     }
+
+    return { totalCnt: orders.length, orders };
   }
 }

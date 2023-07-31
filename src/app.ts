@@ -32,7 +32,7 @@ export class App {
     }
 
     const server = this.app.listen(1041, () => {
-      console.log(server.address());
+      // console.log(server.address());
     });
   }
 
